@@ -34,7 +34,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['prefix'  => 'administrator/'],function(){
-    Route::get('/',[DashboardController::class, 'dashboard'])->name('administrator.dashboard')->middleware('isAdmin');
+    Route::get('/',[DashboardController::class, 'dashboard'])->name('administrator.dashboard');
 });
 
 Route::group(['prefix'  => 'administrator/manajemen_unit'],function(){
@@ -112,4 +112,9 @@ Route::group(['prefix'  => 'operator/semua_klasifikasi'],function(){
 
 Route::group(['prefix'  => 'operator/manajemen_berkas'],function(){
     Route::get('/',[OperatorBerkasController::class, 'index'])->name('operator.berkas');
+    Route::get('/tambah_arsip',[OperatorBerkasController::class, 'add'])->name('operator.berkas.add');
+    Route::post('/',[OperatorBerkasController::class, 'post'])->name('operator.berkas.post');
+    Route::get('/{id}/edit',[OperatorBerkasController::class, 'edit'])->name('operator.berkas.edit');
+    Route::patch('/',[OperatorBerkasController::class, 'update'])->name('operator.berkas.update');
+    Route::delete('/',[OperatorBerkasController::class, 'delete'])->name('operator.berkas.delete');
 });

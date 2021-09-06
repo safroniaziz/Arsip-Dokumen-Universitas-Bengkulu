@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class KlasifikasiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         $klasifikasis = KlasifikasiBerkas::all();
         return view('administrator/klasifikasi.index',compact('klasifikasis'));

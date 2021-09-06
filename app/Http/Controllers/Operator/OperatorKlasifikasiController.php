@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class OperatorKlasifikasiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         $klasifikasis = KlasifikasiBerkas::where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
         return view('operator/klasifikasi.index',compact('klasifikasis'));

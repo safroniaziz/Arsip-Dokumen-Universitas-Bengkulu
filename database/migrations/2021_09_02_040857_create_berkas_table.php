@@ -15,7 +15,7 @@ class CreateBerkasTable extends Migration
     {
         Schema::create('berkas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('klasifikasi_id');
+            $table->string('klasifikasi_nama');
             $table->unsignedBigInteger('operator_id');
             $table->unsignedBigInteger('unit_id');
             $table->string('nomor_berkas');

@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class OperatorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         $operators = User::join('units','units.id','users.unit_id')
                             ->select('users.id','nm_user','nm_unit','email','status')

@@ -9,7 +9,11 @@
     </ul>
 </li>
 
-<li>
+<li
+    @if (Route::current()->getName() == "operator.berkas.add")
+        class="current-page"
+    @endif
+>
     <a href=" {{ route('operator.berkas') }} "><i class="fa fa-file-o"></i>Manajemen Berkas</a>
 </li>
 

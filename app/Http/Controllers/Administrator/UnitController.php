@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class UnitController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         $units = Unit::leftJoin('units as unit_induk','unit_induk.id','units.unit_id_induk')
                         ->select('units.id as id','units.nm_unit','unit_induk.nm_unit as nm_unit_induk')

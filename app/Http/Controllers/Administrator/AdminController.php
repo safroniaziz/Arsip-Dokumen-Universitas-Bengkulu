@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         $admins = User::select('users.id','nm_user','email','status')
                             ->where('level','administrator')->orderBy('users.created_at','desc')->get();
