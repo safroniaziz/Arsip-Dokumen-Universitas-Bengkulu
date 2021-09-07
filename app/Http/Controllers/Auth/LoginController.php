@@ -62,7 +62,12 @@ class LoginController extends Controller
                 }elseif (auth()->user()->level == "operator") {
                     return redirect()->route('operator.dashboard')->with('status','anda berhasil login');;
                 } else {
-                    return redirect()->route('home')->with('status','anda berhasil login');
+                    Auth::logout();
+                    $notification = array(
+                        'message' => 'Gagal, akun anda tidak dikenali!',
+                        'alert-type' => 'error'
+                    );
+                    return redirect()->route('login')->with($notification);
                 }
            } else {
                 return redirect()->route('login')->with('error','Password salah atau akun sudah tidak aktif');

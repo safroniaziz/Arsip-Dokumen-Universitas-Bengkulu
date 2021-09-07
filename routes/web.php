@@ -5,6 +5,7 @@ use App\Http\Controllers\Administrator\BerkasController;
 use App\Http\Controllers\Administrator\DashboardController;
 use App\Http\Controllers\Administrator\GuestController;
 use App\Http\Controllers\Administrator\KlasifikasiController;
+use App\Http\Controllers\Administrator\MenungguController;
 use App\Http\Controllers\Administrator\OperatorController;
 use App\Http\Controllers\Administrator\UnitController;
 use App\Http\Controllers\Operator\AllKlasifikasiController;
@@ -51,6 +52,15 @@ Route::group(['prefix'  => 'administrator/manajemen_klasifikasi'],function(){
     Route::get('/{id}/edit',[KlasifikasiController::class, 'edit'])->name('administrator.klasifikasi.edit');
     Route::patch('/',[KlasifikasiController::class, 'update'])->name('administrator.klasifikasi.update');
     Route::delete('/',[KlasifikasiController::class, 'delete'])->name('administrator.klasifikasi.delete');
+    Route::patch('/nonaktifkan_status/{id}',[KlasifikasiController::class, 'nonAktifkanStatus'])->name('administrator.klasifikasi.nonaktifkan_status');
+});
+
+Route::group(['prefix'  => 'administrator/menunggu_verifikasi'],function(){
+    Route::get('/',[MenungguController::class, 'index'])->name('administrator.menunggu');
+    Route::patch('/nonaktifkan_status/{id}',[MenungguController::class, 'aktifkanStatus'])->name('administrator.menunggu.aktifkan_status');
+    Route::get('/{id}/edit',[MenungguController::class, 'edit'])->name('administrator.menunggu.edit');
+    Route::patch('/',[MenungguController::class, 'update'])->name('administrator.menunggu.update');
+    Route::delete('/',[MenungguController::class, 'delete'])->name('administrator.menunggu.delete');
 });
 
 Route::group(['prefix'  => 'administrator/manajemen_berkas'],function(){

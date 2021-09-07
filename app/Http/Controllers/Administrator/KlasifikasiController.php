@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use App\Http\Controllers\Controller;
 use App\Models\KlasifikasiBerkas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KlasifikasiController extends Controller
 {
@@ -14,7 +15,10 @@ class KlasifikasiController extends Controller
     }
     
     public function index(){
-        $klasifikasis = KlasifikasiBerkas::all();
+        $klasifikasis = KlasifikasiBerkas::join('users','users.id','klasifikasi_berkas.user_id')
+                                            ->leftJoin('units','units.id','users.unit_id')
+                                            ->select('klasifikasi_berkas.id','nm_user','level','nm_unit','nm_klasifikasi','keterangan','klasifikasi_berkas.status')
+                                            ->where('klasifikasi_berkas.status','aktif')->get();
         return view('administrator/klasifikasi.index',compact('klasifikasis'));
     }
 
@@ -42,6 +46,8 @@ class KlasifikasiController extends Controller
         }
         KlasifikasiBerkas::create([
             'nm_klasifikasi' => $request->nm_klasifikasi,
+            'user_id'   =>  Auth::user()->id,
+            'status'    =>  'aktif',
             'keterangan' => $request->keterangan,
         ]);
         $notification = array(
@@ -89,6 +95,18 @@ class KlasifikasiController extends Controller
             'alert-type' => 'success'
         );
 
+        return redirect()->route('administrator.klasifikasi')->with($notification);
+    }
+
+    public function nonaktifkanStatus($id){
+        KlasifikasiBerkas::where('id',$id)->update([
+            'status'    =>  'nonaktif'
+        ]);
+
+        $notification = array(
+            'message' => 'Berhasil, status klasifikasi berhasil dinonaktifkan!',
+            'alert-type' => 'success'
+        );
         return redirect()->route('administrator.klasifikasi')->with($notification);
     }
 }

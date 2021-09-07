@@ -34,41 +34,9 @@
                             </div>
                             @else
                             <div class="alert alert-success alert-block" id="keterangan">
-                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut semua klasifikasi berkas yang tersedia, silahkan tambahkan jika diperlukan !!
+                                <strong><i class="fa fa-info-circle"></i>&nbsp;Perhatian: </strong> Berikut semua klasifikasi berkas yang menunggu verifikasi, silahkan aktifkan jika diperlukan !!
                             </div>
                     @endif
-                </div>
-                <div class="col-md-12" id="form-klasifikasi">
-                    <hr style="width:50%;">
-                    <form action="{{ route('administrator.klasifikasi.post') }}" method="POST">
-                        {{ csrf_field() }} {{ method_field('POST') }}
-                        <div class="row">
-                            <div class="form-group col-md-12 col-xs-12">
-                                <label>Nama Klasifikasi :</label>
-                                <input type="text" name="nm_klasifikasi" value="{{ old('nm_klasifikasi') }}" class="form-control @error('nm_klasifikasi') is-invalid @enderror" placeholder="masukan nama klasifikasi">
-                                <div>
-                                    @if ($errors->has('nm_klasifikasi'))
-                                        <small class="form-text text-danger">{{ $errors->first('nm_klasifikasi') }}</small>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group col-md-12 col-xs-12">
-                                <label>Keterangan :</label>
-                                <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" id="" cols="30" rows="3">{{ old('keterangan') }}</textarea>
-                                <div>
-                                    @if ($errors->has('keterangan'))
-                                        <small class="form-text text-danger">{{ $errors->first('keterangan') }}</small>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" style="text-align:center;">
-                            <a onclick="batalkan()" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-close"></i>&nbsp; Batalkan</a>
-                            <button type="reset" class="btn btn-warning btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-refresh"></i>&nbsp; Ulangi</button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i>&nbsp; Simpan Jabatan</button>
-                        </div>
-                    </form>
-                    <hr style="width:50%;">
                 </div>
                 <div class="col-md-12">
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
@@ -103,13 +71,13 @@
                                         @if ($klasifikasi->status == "aktif")
                                             <label class="badge badge-success"><i class="fa fa-check-circle"></i>&nbsp; Aktif</label>
                                             @else
-                                            <label class="badge badge-success"><i class="fa fa-check-circle"></i>&nbsp; Tidak Aktif</label>
+                                            <label class="badge badge-danger"><i class="fa fa-minus-circle"></i>&nbsp; Tidak Aktif</label>
                                         @endif
                                     </td>
                                     <td style="text-align:center;">
-                                        <form action="{{ route('administrator.klasifikasi.nonaktifkan_status',[$klasifikasi->id]) }}" method="POST">
+                                        <form action="{{ route('administrator.menunggu.aktifkan_status',[$klasifikasi->id]) }}" method="POST">
                                             {{ csrf_field() }} {{ method_field('PATCH') }}
-                                            <button type="submit" class="btn btn-danger btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-thumbs-down"></i></button>
+                                            <button type="submit" class="btn btn-success btn-sm" style="color:white; cursor:pointer;"><i class="fa fa-thumbs-up"></i></button>
                                         </form>
                                     </td>
                                     <td>
@@ -124,7 +92,7 @@
                     <div class="modal fade" id="modalubah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form action=" {{ route('administrator.klasifikasi.update') }} " method="POST">
+                                <form action=" {{ route('administrator.menunggu.update') }} " method="POST">
                                     {{ csrf_field() }} {{ method_field('PATCH') }}
                                     <div class="modal-header">
                                         <p style="font-size:15px; font-weight:bold;" class="modal-title"><i class="fa fa-suitcase"></i>&nbsp;Form Ubah Data Klasifikasi Berkas</p>
@@ -161,7 +129,7 @@
                 <div class="modal fade modal-danger" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <form action=" {{ route('administrator.klasifikasi.delete') }} " method="POST">
+                            <form action=" {{ route('administrator.menunggu.delete') }} " method="POST">
                                 {{ csrf_field() }} {{ method_field('DELETE') }}
                                 <div class="modal-header">
                                     <p style="font-size:15px; font-weight:bold;" class="modal-title"><i class="fa fa-trash"></i>&nbsp;Form Konfirmasi Hapus Data</p>
@@ -196,10 +164,10 @@
                 responsive : true,
             });
         } );
-        
+
         function editklasifikasi(id){
             $.ajax({
-                url: "{{ url('administrator/manajemen_klasifikasi') }}"+'/'+ id + "/edit",
+                url: "{{ url('administrator/menunggu_verifikasi') }}"+'/'+ id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data){
@@ -222,6 +190,6 @@
         $(document).ready(function() {
             $('#Klasifikasi_id_induk').select2({width:'100%'});
         });
-
+        
     </script>
 @endpush

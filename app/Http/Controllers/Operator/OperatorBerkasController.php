@@ -20,10 +20,9 @@ class OperatorBerkasController extends Controller
     }
     
     public function index(){
-        $berkas = Berkas::join('klasifikasi_berkas','klasifikasi_berkas.id','berkas.klasifikasi_id')
-                        ->join('users','users.id','berkas.operator_id')
+        $berkas = Berkas::join('users','users.id','berkas.operator_id')
                         ->join('units','units.id','users.unit_id')
-                        ->select('berkas.id as id','berkas.nomor_berkas','nm_unit','jenis_berkas','nm_klasifikasi','berkas.created_at','file','nm_user as nm_operator','nm_unit','uraian_informasi')
+                        ->select('berkas.id as id','berkas.nomor_berkas','klasifikasi_id','nm_unit','jenis_berkas','berkas.created_at','file','nm_user as nm_operator','nm_unit','uraian_informasi')
                         ->where('units.id',Auth::user()->unit_id)
                         ->orderBy('berkas.id','desc')->get();
         return view('operator/berkas.index',compact('berkas'));
@@ -35,10 +34,6 @@ class OperatorBerkasController extends Controller
     }
 
     public function post(Request $request){
-        //     foreach($tags as $tag){
-        //         return $tag;
-        // }
-
         $messages = [
             'required' => ':attribute harus diisi',
             'numeric' => ':attribute harus angka',
@@ -77,7 +72,7 @@ class OperatorBerkasController extends Controller
         Berkas::create([
             'nomor_berkas'    =>    $request->nomor_berkas,  
             'jenis_berkas'    =>    $request->jenis_berkas,  
-            'klasifikasi_nama'    =>  implode(',',$tags),  
+            'klasifikasi_id'    =>  implode(',',$tags),  
             'file'    =>    $model['file'],  
             'uraian_informasi'    =>    $request->uraian_informasi,  
             'operator_id'   =>  Auth::user()->id,
@@ -94,7 +89,8 @@ class OperatorBerkasController extends Controller
     public function edit($id){
         $berkas = Berkas::find($id);
         $klasifikasis = KlasifikasiBerkas::where('status','aktif')->get();
-        return view('operator/berkas.edit',compact('berkas','klasifikasis'));
+        $item_klasifikasi = explode(',',$berkas->klasifikasi_id);
+        return view('operator/berkas.edit',compact('berkas','klasifikasis','item_klasifikasi'));
     }
 
     public function update(Request $request){
@@ -128,6 +124,8 @@ class OperatorBerkasController extends Controller
         $slug = Str::slug($nama_unit->nm_unit);
         $slug_user = Str::slug(Auth::user()->nm_user);
 
+        $tags = $request->input('klasifikasi_id');
+
         DB::beginTransaction();
         try {
             if ($request->hasFile('file')){
@@ -141,7 +139,7 @@ class OperatorBerkasController extends Controller
             Berkas::where('id',$request->id)->update([
                 'nomor_berkas'    =>    $request->nomor_berkas,  
                 'jenis_berkas'    =>    $request->jenis_berkas,  
-                'klasifikasi_id'    =>  $request->klasifikasi_id,  
+                'klasifikasi_id'    =>  implode(',',$tags), 
                 'file'    =>    $model['file'],
                 'uraian_informasi'    =>    $request->uraian_informasi,  
                 'operator_id'   =>  Auth::user()->id,

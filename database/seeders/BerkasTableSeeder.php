@@ -22,7 +22,7 @@ class BerkasTableSeeder extends Seeder
         foreach (range(1,30) as $index) {
             DB::table('berkas')->insert([
                 'klasifikasi_id'    =>  KlasifikasiBerkas::all()->random()->id,
-                'operator_id'    =>  $faker->randomElement(['1','2','3']),
+                'operator_id'    =>  $faker->randomElement(['4','24','29','30']),
                 'unit_id'    =>  $faker->randomElement(['1','2','3']),
                 'jenis_berkas' => $faker->text(),
                 'file'    =>  $faker->text(),

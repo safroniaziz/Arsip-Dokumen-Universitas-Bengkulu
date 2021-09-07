@@ -6,8 +6,11 @@
     <a href=" {{ route('administrator.unit') }} "><i class="fa fa-cog"></i>Manajemen Unit</a>
 </li>
 
-<li>
-    <a href=" {{ route('administrator.klasifikasi') }} "><i class="fa fa-list-alt"></i>Klasifikasi Berkas</a>
+<li><a><i class="fa fa-list-alt"></i>Klasifikasi Klasifikasi <span class="fa fa-chevron-down"></span></a>
+    <ul class="nav child_menu">
+        <li><a href="{{ route('administrator.klasifikasi') }}">Klasifikasi Aktif</a></li>
+        <li><a href="{{ route('administrator.menunggu') }}">Menunggu Verifikasi</a></li>
+    </ul>
 </li>
 
 <li>

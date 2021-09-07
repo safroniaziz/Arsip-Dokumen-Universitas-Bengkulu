@@ -2,7 +2,7 @@
     <a href=" {{ route('operator.dashboard') }} "><i class="fa fa-home"></i>Dashboard</a>
 </li>
 
-<li><a><i class="fa fa-users"></i>Klasifikasi Berkas <span class="fa fa-chevron-down"></span></a>
+<li><a><i class="fa fa-list-alt"></i>Klasifikasi Berkas <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
         <li><a href="{{ route('operator.klasifikasi_saya') }}">Klasifikasi Saya</a></li>
         <li><a href="{{ route('operator.all_klasifikasi') }}">Semua Klasifikasi</a></li>

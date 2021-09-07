@@ -1,3 +1,6 @@
+@php
+    use App\Models\KlasifikasiBerkas;
+@endphp
 @extends('layouts.layout')
 @section('title', 'Manajemen Klasifikasi Berkas')
 @section('login_as', 'Operator')
@@ -69,7 +72,17 @@
                                         Diinput {{ $berkas->created_at ? $berkas->created_at->diffForHumans() : '-' }} ({{ $berkas->created_at ? \Carbon\Carbon::parse($berkas->created_at)->format('j F Y H:i') : '' }})
                                     </td>
                                     <td> {{ $berkas->jenis_berkas }} </td>
-                                    <td> {{ $berkas->nm_klasifikasi }} </td>
+                                    <td>
+                                        <?php
+                                            $klasifikasi = explode(',',$berkas->klasifikasi_id);
+                                            foreach ($klasifikasi as $item) {
+                                                $data = KlasifikasiBerkas::where('id',$item)->select('nm_klasifikasi')->first();
+                                                ?>
+                                                    <label class="badge badge-info">{{ $data->nm_klasifikasi }}</label>
+                                                <?php
+                                            }
+                                        ?>
+                                    </td>
                                     <td style="text-align: center">
                                         <a class="btn btn-primary btn-sm" href="{{ asset('upload_file/'.\Illuminate\Support\Str::slug($berkas->nm_unit).'/'.$berkas->file) }}" download="{{ $berkas->file }}"><i class="fa fa-download"></i></a>
                                     </td>

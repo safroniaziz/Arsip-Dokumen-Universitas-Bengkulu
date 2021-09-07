@@ -1,3 +1,6 @@
+@php
+    use App\Models\KlasifikasiBerkas;
+@endphp
 @extends('layouts.layout')
 @section('title', 'Manajemen Klasifikasi Berkas')
 @section('login_as', 'Operator')
@@ -44,18 +47,6 @@
                         {{ csrf_field() }} {{ method_field('PATCH') }}
                         <div class="col-md-12">
                             <input type="hidden" name="id" value="{{ $berkas->id }}">
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Klasifikasi Arsip</label></label>
-                                <select name="klasifikasi_id"  class="form-control @error('klasifikasi_id') is-invalid @enderror" id="klasifikasi_id" style="font-size:13px;">
-                                    <option value="" disabled selected>-- pilih klasifikasi --</option>
-                                    @foreach ($klasifikasis as $klasifikasi)
-                                        <option {{ $berkas->klasifikasi_id == $klasifikasi->id ? 'selected' : '' }} value="{{ $klasifikasi->id }}">{{ $klasifikasi->nm_klasifikasi }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('klasifikasi_id'))
-                                    <small class="form-text text-danger">{{ $errors->first('klasifikasi_id') }}</small>
-                                @endif
-                            </div>
                            
                             <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">Nomor Berkas</label>
@@ -79,6 +70,22 @@
                                     <small class="form-text text-danger">{{ $errors->first('file') }}</small>
                                 @endif
                             </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Klasifikasi Arsip</label></label>
+                                <select name="klasifikasi_id[]"  class="form-control tags-selector @error('klasifikasi_id') is-invalid @enderror" id="klasifikasi_id" style="font-size:13px;" multiple>
+                                        @foreach ($klasifikasis as $klasifikasi)
+                                            <option 
+                                                @foreach ($item_klasifikasi as $item)
+                                                    {{ $klasifikasi->id == $item ? 'selected' : '' }}
+                                                @endforeach
+                                            value="{{ $klasifikasi->id }}">{{ $klasifikasi->nm_klasifikasi }}</option>
+                                        @endforeach
+                                </select>
+                                @if ($errors->has('klasifikasi_id'))
+                                    <small class="form-text text-danger">{{ $errors->first('klasifikasi_id') }}</small>
+                                @endif
+                            </div>
 
                             <div class="form-group col-md-12">
                                 <label for="exampleInputEmail1">Uraian Informasi : </label>
@@ -100,3 +107,11 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function(){
+            $('.tags-selector').select2();
+        })
+    </script>
+@endpush

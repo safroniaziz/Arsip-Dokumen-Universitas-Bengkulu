@@ -14,18 +14,25 @@ class KlasifikasiTableSeeder extends Seeder
      */
     public function run()
     {
+        $faker = \Faker\Factory::create();
         $klasifikasi = [
             [
                 'nm_klasifikasi' => "KP",
                 'keterangan' => 'Keterangan',
+                'user_id'   =>KlasifikasiBerkas::all()->random()->id,
+                'status'    =>  $faker->randomElement(['aktif','nonaktif']),
             ],
             [
                 'nm_klasifikasi' => 'HK',
                 'keterangan' => 'Keterangan',
+                'user_id'   =>  KlasifikasiBerkas::all()->random()->id,
+                'status'    =>  $faker->randomElement(['aktif','nonaktif']),
             ],
             [
                 'nm_klasifikasi' => "KP",
                 'keterangan' => 'Keterangan',
+                'user_id'   =>  KlasifikasiBerkas::all()->random()->id,
+                'status'    =>  $faker->randomElement(['aktif','nonaktif']),
             ],
             
         ];
