@@ -2,8 +2,8 @@
     use App\Models\KlasifikasiBerkas;
 @endphp
 @extends('layouts.layout')
-@section('title', 'Manajemen Klasifikasi Berkas')
-@section('login_as', 'Administrator')
+@section('title', 'Lihat Berkas')
+@section('login_as', 'Guest')
 @section('user-login')
     @if (Auth::check())
     {{ Auth::user()->nm_user }}
@@ -15,7 +15,7 @@
     @endif
 @endsection
 @section('sidebar-menu')
-    @include('administrator/sidebar')
+    @include('guest/sidebar')
 @endsection
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
@@ -41,17 +41,8 @@
                             </div>
                     @endif
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="">Filter Per Klasifikasi</label>
-                    <select id="klasifikasi" class="form-control">
-                        <option disabled selected>-- pilih klasifikasi --</option>
-                        @foreach ($klasifikasis as $item)
-                            <option value="{{ $item->nm_klasifikasi }}">{{ $item->nm_klasifikasi }}</option>
-                        @endforeach
-                    </select>
-                </div>
 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-12">
                     <label for="">Filter Per Unit</label>
                     <select id="unit" class="form-control">
                         <option disabled selected>-- pilih unit --</option>
@@ -127,47 +118,15 @@
     <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.min.js"></script>
     <script>
         $(document).ready(function() {
-            var table = $('#table').DataTable( {
-                responsive :true,
-                buttons: [
-                {
-                    extend: 'copyHtml5',
-                    exportOptions: {
-                        columns: [ 0, ':visible' ]
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                'colvis'
-            ],
-                dom: 
-                "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
-                "<'row'<'col-md-12'tr>>" +
-                "<'row'<'col-md-5'i><'col-md-7'p>>",
-                lengthMenu:[
-                    [5,10,25,50,100,-1],
-                    [5,10,25,50,100,"All"]
-                ]
-            } );
-        
-            table.buttons().container()
-                .appendTo( '#table_wrapper .col-md-5:eq(0)' );
-        } );
-        var table = $('#table').DataTable();
-        $('#klasifikasi').change(function() {
-            table.columns(3)
-            .search(this.value)
-            .draw();
-        });
+            var table = $('#table').DataTable({
+                responsive : true,
+            });
 
-        $('#unit').change(function() {
+            $('#unit').change(function() {
             table.columns(6)
             .search(this.value)
             .draw();
         });
+        } );
     </script>
 @endpush

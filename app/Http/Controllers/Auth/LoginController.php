@@ -58,10 +58,24 @@ class LoginController extends Controller
         if (auth()->attempt(array('email'   =>  $input['email'], 'password' =>  $input['password'], 'status'    =>  'aktif'))) {
            if (Auth::check()) {
                 if (auth()->user()->level == "administrator") {
-                    return redirect()->route('administrator.dashboard')->with('status','anda berhasil login');;
+                    $notification1 = array(
+                        'message' => 'Berhasil, akun login sebagai administrator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('administrator.dashboard')->with($notification1);;
                 }elseif (auth()->user()->level == "operator") {
-                    return redirect()->route('operator.dashboard')->with('status','anda berhasil login');;
-                } else {
+                    $notification2 = array(
+                        'message' => 'Berhasil, akun login sebagai administrator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('operator.dashboard')->with($notification2);;
+                }elseif (auth()->user()->level == "guest") {
+                    $notification2 = array(
+                        'message' => 'Berhasil, akun login sebagai administrator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('guest.dashboard')->with($notification2);;
+                }else {
                     Auth::logout();
                     $notification = array(
                         'message' => 'Gagal, akun anda tidak dikenali!',

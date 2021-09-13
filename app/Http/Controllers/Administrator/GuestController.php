@@ -105,7 +105,7 @@ class GuestController extends Controller
             'message' => 'Berhasil, status guest berhasil dinonaktifkan!',
             'alert-type' => 'success'
         );
-        return redirect()->route('administrator.guest')->with($notification);
+        return redirect()->back()->with($notification);
     }
 
     public function aktifkanStatus($id){
@@ -117,6 +117,6 @@ class GuestController extends Controller
             'message' => 'Berhasil, status guest berhasil diakatifkan!',
             'alert-type' => 'success'
         );
-        return redirect()->route('administrator.guest')->with($notification);
+        return redirect()->back()->with($notification);
     }
 }

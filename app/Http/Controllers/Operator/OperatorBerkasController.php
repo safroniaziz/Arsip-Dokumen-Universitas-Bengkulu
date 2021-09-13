@@ -195,4 +195,25 @@ class OperatorBerkasController extends Controller
             
         }
     }
+
+    public function berkasAnak(){
+        $unit = Auth::user()->unit_id;
+        $unitAnak = Unit::where('unit_id_induk',$unit)->select('units.id')->pluck('id');
+        if (count($unitAnak)<1) {
+            $gagal = array(
+                'message' => 'Gagal, unit anda bukan unit induk!',
+                'alert-type' => 'error'
+            );
+            return redirect()->back()->with($gagal);
+        }
+        else{
+            $units = Unit::where('unit_id_induk',$unit)->select('units.id','nm_unit')->get();
+            $berkas = Berkas::join('users','users.id','berkas.operator_id')
+                        ->join('units','units.id','users.unit_id')
+                        ->select('berkas.id as id','berkas.nomor_berkas','klasifikasi_id','nm_unit','jenis_berkas','berkas.created_at','file','nm_user as nm_operator','nm_unit','uraian_informasi')
+                        ->whereIn('berkas.unit_id',$unitAnak)
+                        ->orderBy('units.nm_unit')->get();
+            return view('operator/berkas.unit_anak',compact('unitAnak','berkas','units'));
+        }
+    }
 }

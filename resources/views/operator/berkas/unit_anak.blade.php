@@ -3,7 +3,7 @@
 @endphp
 @extends('layouts.layout')
 @section('title', 'Manajemen Klasifikasi Berkas')
-@section('login_as', 'Administrator')
+@section('login_as', 'Operator')
 @section('user-login')
     @if (Auth::check())
     {{ Auth::user()->nm_user }}
@@ -15,7 +15,7 @@
     @endif
 @endsection
 @section('sidebar-menu')
-    @include('administrator/sidebar')
+    @include('operator/sidebar')
 @endsection
 @section('content')
     <section class="panel" style="margin-bottom:20px;">
@@ -41,17 +41,7 @@
                             </div>
                     @endif
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="">Filter Per Klasifikasi</label>
-                    <select id="klasifikasi" class="form-control">
-                        <option disabled selected>-- pilih klasifikasi --</option>
-                        @foreach ($klasifikasis as $item)
-                            <option value="{{ $item->nm_klasifikasi }}">{{ $item->nm_klasifikasi }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-12">
                     <label for="">Filter Per Unit</label>
                     <select id="unit" class="form-control">
                         <option disabled selected>-- pilih unit --</option>
@@ -60,8 +50,7 @@
                         @endforeach
                     </select>
                 </div>
-
-                <div class="col-md-12 table-responsive">
+                <div class="col-md-12">
                     <table class="table table-striped table-bordered" id="table" style="width:100%;">
                         <thead>
                             <tr>
@@ -73,6 +62,7 @@
                                 <th>Pengunggah</th>
                                 <th>Unit Pengunggah</th>
                                 <th>Uraian Informasi</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,6 +81,7 @@
                                     <td>
                                         <?php
                                             $klasifikasi = explode(',',$berkas->klasifikasi_id);
+                                            // echo json_encode($klasifikasi);
                                             foreach ($klasifikasi as $item) {
                                                 $data = KlasifikasiBerkas::where('id',$item)->select('nm_klasifikasi')->first();
                                                 if (!empty($data['nm_klasifikasi'])) {
@@ -107,10 +98,46 @@
                                     <td> {{ $berkas->nm_operator }} </td>
                                     <td> {{ $berkas->nm_unit }} </td>
                                     <td> {{ $berkas->uraian_informasi }} </td>
+                                    <td>
+                                        <a href="{{ route('operator.berkas.edit',[$berkas->id]) }}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                        <a onclick="hapusBerkas({{ $berkas->id }})" class="btn btn-danger btn-sm" style="cursor: pointer; color:white;"><i class="fa fa-trash"></i></a>
+                                        {{-- <form action="{{ route('operator.berkas.delete',[$berkas->id]) }}" method="POST">
+                                            {{ csrf_field() }} {{ method_field('DELETE') }}
+                                            <button type="submit" name="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </form> --}}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <!-- Modal Hapus-->
+                    <div class="modal fade modal-danger" id="modalhapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form action=" {{ route('operator.berkas.delete') }} " method="POST">
+                                    {{ csrf_field() }} {{ method_field('DELETE') }}
+                                    <div class="modal-header">
+                                        <p style="font-size:15px; font-weight:bold;" class="modal-title"><i class="fa fa-trash"></i>&nbsp;Form Konfirmasi Hapus Data</p>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="hidden" name="id" id="id_hapus">
+                                                Apakah anda yakin ingin menghapus data? klik hapus jika iya !!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" style="border: 1px solid #fff;background: transparent;color: #fff;" class="btn btn-sm btn-outline pull-left" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp; Batalkan</button>
+                                        <button type="submit" style="border: 1px solid #fff;background: transparent;color: #fff;" class="btn btn-sm btn-outline"><i class="fa fa-check-circle"></i>&nbsp; Ya, Hapus</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,18 +183,19 @@
         
             table.buttons().container()
                 .appendTo( '#table_wrapper .col-md-5:eq(0)' );
-        } );
-        var table = $('#table').DataTable();
-        $('#klasifikasi').change(function() {
-            table.columns(3)
-            .search(this.value)
-            .draw();
-        });
 
-        $('#unit').change(function() {
+                $('#unit').change(function() {
             table.columns(6)
             .search(this.value)
             .draw();
         });
+        } );
+        
+        function hapusBerkas(id){
+            $('#modalhapus').modal('show');
+            $('#id_hapus').val(id);
+        }
+
+        
     </script>
 @endpush

@@ -7,7 +7,10 @@ use App\Http\Controllers\Administrator\GuestController;
 use App\Http\Controllers\Administrator\KlasifikasiController;
 use App\Http\Controllers\Administrator\MenungguController;
 use App\Http\Controllers\Administrator\OperatorController;
+use App\Http\Controllers\Administrator\PrevilagesGuest;
 use App\Http\Controllers\Administrator\UnitController;
+use App\Http\Controllers\Guest\GuestBerkasController;
+use App\Http\Controllers\Guest\GuestDashboardController;
 use App\Http\Controllers\Operator\AllKlasifikasiController;
 use App\Http\Controllers\Operator\OperatorBerkasController;
 use App\Http\Controllers\Operator\OperatorDashboardController;
@@ -65,6 +68,15 @@ Route::group(['prefix'  => 'administrator/menunggu_verifikasi'],function(){
 
 Route::group(['prefix'  => 'administrator/manajemen_berkas'],function(){
     Route::get('/',[BerkasController::class, 'index'])->name('administrator.berkas');
+});
+
+Route::group(['prefix'  => 'administrator/previlages_guest'],function(){
+    Route::get('/',[PrevilagesGuest::class, 'index'])->name('administrator.hak');
+    Route::get('/detail/{id}',[PrevilagesGuest::class, 'detail'])->name('administrator.hak.detail');
+    Route::get('detail/{id}/tambah_previlages',[PrevilagesGuest::class, 'add'])->name('administrator.hak.add');
+    Route::post('/',[PrevilagesGuest::class, 'post'])->name('administrator.hak.post');
+    Route::patch('/nonaktifkan_status/{id}/{id_guest}',[PrevilagesGuest::class, 'nonAktifkanStatus'])->name('administrator.hak.nonaktifkan_status');
+    Route::delete('/{id}/{id_guest}',[PrevilagesGuest::class, 'delete'])->name('administrator.hak.delete');
 });
 
 Route::group(['prefix'  => 'administrator/manajemen_operator'],function(){
@@ -127,4 +139,17 @@ Route::group(['prefix'  => 'operator/manajemen_berkas'],function(){
     Route::get('/{id}/edit',[OperatorBerkasController::class, 'edit'])->name('operator.berkas.edit');
     Route::patch('/',[OperatorBerkasController::class, 'update'])->name('operator.berkas.update');
     Route::delete('/',[OperatorBerkasController::class, 'delete'])->name('operator.berkas.delete');
+});
+
+Route::group(['prefix'  => 'operator/manajemen_bawah_unit'],function(){
+    Route::get('/',[OperatorBerkasController::class, 'berkasAnak'])->name('operator.berkas_anak');
+});
+
+// Route Operator
+Route::group(['prefix'  => 'guest/'],function(){
+    Route::get('/',[GuestDashboardController::class, 'dashboard'])->name('guest.dashboard')->middleware('isGuest');
+});
+
+Route::group(['prefix'  => 'guest/daftar_berkas'],function(){
+    Route::get('/',[GuestBerkasController::class, 'index'])->name('guest.berkas');
 });

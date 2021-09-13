@@ -105,7 +105,7 @@
                                 <form action=" {{ route('administrator.unit.update') }} " method="POST">
                                     {{ csrf_field() }} {{ method_field('PATCH') }}
                                     <div class="modal-header">
-                                        <p style="font-size:15px; font-weight:bold;" class="modal-title"><i class="fa fa-suitcase"></i>&nbsp;Form Ubah Data Jabatan</p>
+                                        <p style="font-size:15px; font-weight:bold;" class="modal-title"><i class="fa fa-suitcase"></i>&nbsp;Form Ubah Data Unit</p>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -116,7 +116,7 @@
                                                 <input type="hidden" name="id" id="id_ubah">
                                                 <div class="form-group">
                                                     <label for="">Nama Unit :</label>
-                                                    <input type="text" name="nm_unit" id="nm_unit" class="form-control @error('kelas_jabatan') is-invalid @enderror" required placeholder="masukan kelas unit">
+                                                    <input type="text" name="nm_unit" id="nm_unit" class="form-control @error('nm_unit') is-invalid @enderror" required placeholder="masukan kelas unit">
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-12 col-xs-12">

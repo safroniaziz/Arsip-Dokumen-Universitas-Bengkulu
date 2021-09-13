@@ -17,6 +17,14 @@
     <a href=" {{ route('administrator.berkas') }} "><i class="fa fa-file-o"></i>Manajemen Berkas</a>
 </li>
 
+<li
+    @if (Route::current()->getName() == "administrator.hak.add" || Route::current()->getName() == "administrator.hak.detail")
+        class="current-page"
+    @endif
+>
+    <a href=" {{ route('administrator.hak') }} "><i class="fa fa-key"></i>Previlages Guest</a>
+</li>
+
 <li><a><i class="fa fa-users"></i>Manajemen Pengguna <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
         <li><a href="{{ route('administrator.operator') }}">Manajemen Operator</a></li>

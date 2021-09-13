@@ -10,11 +10,23 @@
 </li>
 
 <li
-    @if (Route::current()->getName() == "operator.berkas.add")
-        class="current-page"
+    @if (Route::current()->getName() == "operator.berkas.add" || Route::current()->getName() == "operator.berkas.edit")
+        class="set_active active"
     @endif
->
-    <a href=" {{ route('operator.berkas') }} "><i class="fa fa-file-o"></i>Manajemen Berkas</a>
+><a><i class="fa fa-list-alt"></i>Manajemen Berkas <span class="fa fa-chevron-down"></span></a>
+    <ul class="nav child_menu"
+        @if (Route::current()->getName() == "operator.berkas.add" || Route::current()->getName() == "operator.berkas.edit")
+            style="display:block !important;"
+        @endif
+    >
+        <li
+            @if (Route::current()->getName() == "operator.berkas.add" || Route::current()->getName() == "operator.berkas.edit")
+                class="current-page"
+            @endif
+        ><a href="{{ route('operator.berkas') }}">Berkas Saya</a></li>
+
+        <li><a href="{{ route('operator.berkas_anak') }}">Berkas Bawah Unit</a></li>
+    </ul>
 </li>
 
 <li style="padding-left:2px;">

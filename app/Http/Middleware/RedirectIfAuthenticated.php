@@ -25,9 +25,23 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 // return redirect(RouteServiceProvider::HOME);
                 if (auth()->user()->level == "administrator") {
-                    return redirect()->route('administrator.dashboard')->with('status','anda berhasil login');;
+                    $notification1 = array(
+                        'message' => 'Berhasil, akun login sebagai administrator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('administrator.dashboard')->with($notification1);;
                 }elseif (auth()->user()->level == "operator") {
-                    return redirect()->route('operator.dashboard')->with('status','anda berhasil login');;
+                    $notification2 = array(
+                        'message' => 'Berhasil, anda login sebagai operator!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('operator.dashboard')->with($notification2);;
+                } elseif (auth()->user()->level == "guest") {
+                    $notification2 = array(
+                        'message' => 'Berhasil, anda login sebagai guest!',
+                        'alert-type' => 'success'
+                    );
+                    return redirect()->route('guest.dashboard')->with($notification2);;
                 } else {
                     Auth::logout();
                     $notification = array(
